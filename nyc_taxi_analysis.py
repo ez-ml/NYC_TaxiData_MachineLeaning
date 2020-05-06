@@ -42,6 +42,7 @@ if __name__ == "__main__":
         log_param("regParam", 0.3)
         log_param("elasticNetParam", 0.8)
 
+
         lr = LinearRegression(maxIter=10, regParam=0.3, elasticNetParam=0.8)
 
         pipeline = Pipeline(stages=[_c3Indexer,_c4Indexer,_c8Indexer,assembler, lr])
