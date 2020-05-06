@@ -82,5 +82,4 @@ dependencies:
   - xz=5.2.5=h0b31af3_0
   - yaml=0.2.4=h0b31af3_0
   - zlib=1.2.11=h0b31af3_1006
-prefix: /Users/shaileshpilare/opt/miniconda3/envs/NYC_Trips_Analysis
 

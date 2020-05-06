@@ -34,6 +34,9 @@ if __name__ == "__main__":
     assembler = VectorAssembler(inputCols=["c3Index", "c4Index", "c8Index"], outputCol="features")
     (trainingData, testData) = df_201.randomSplit([0.7, 0.3])
 
+    alpha = float(sys.argv[1]) if len(sys.argv) > 1 else 0.5
+    l1_ratio = float(sys.argv[2]) if len(sys.argv) > 2 else 0.5
+
     with mlflow.start_run():
         log_param("maxIter", 10)
         log_param("regParam", 0.3)
