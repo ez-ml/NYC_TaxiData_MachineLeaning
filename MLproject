@@ -1,0 +1,8 @@
+name: NYC_Trips_Analysis
+
+conda_env: conda.yaml
+
+entry_points:
+  main:
+    parameters:
+    command: "python nyc_taxi_analysis.py"
