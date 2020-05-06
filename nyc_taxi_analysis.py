@@ -21,7 +21,6 @@ if __name__ == "__main__":
         .appName("Python Spark MLFlow basic example") \
         .getOrCreate()
 
-
     df_201=spark.read.csv('data/yellow_tripdata_reduced.csv')
 
     df_201=df_201.withColumnRenamed("_c12", "label")
@@ -46,6 +45,7 @@ if __name__ == "__main__":
         lr = LinearRegression(maxIter=10, regParam=0.3, elasticNetParam=0.8)
 
         pipeline = Pipeline(stages=[_c3Indexer,_c4Indexer,_c8Indexer,assembler, lr])
+
 
         grModel = pipeline.fit(trainingData)
         df_final=grModel.transform(testData)
