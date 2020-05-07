@@ -19,6 +19,7 @@ if __name__ == "__main__":
     spark = SparkSession \
         .builder \
         .appName("Python Spark MLFlow basic example") \
+        .enableHiveSupport() \
         .getOrCreate()
 
     df_201=spark.sql("SELECT * from default.nyc_trips_final_4").na.drop()
