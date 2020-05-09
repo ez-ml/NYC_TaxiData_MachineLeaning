@@ -18,7 +18,7 @@ if __name__ == "__main__":
 
 
     modelType = str(sys.argv[1])
-    maxIter = float(sys.argv[2])
+    maxIter = int(sys.argv[2])
     regParam = float(sys.argv[3])
     elasticNetParam = float(sys.argv[4])
 
@@ -66,4 +66,5 @@ if __name__ == "__main__":
 
     mlflow.spark.log_model(grModel, "spark-model")
     mlflow.spark.save_model(grModel, "spark-model")
+
     print("Model saved in run %s" % mlflow.active_run().info.run_uuid)

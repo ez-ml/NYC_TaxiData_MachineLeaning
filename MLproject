@@ -6,7 +6,7 @@ entry_points:
   main:
     parameters:
         modelType: str
-        maxIter: {type: float, default: 10}
+        maxIter: {type: int, default: 8}
         regParam: {type: float, default: 0.3}
         elasticNetParam: {type: float, default: 0.8}
     command: "spark-submit ml_experiments_2.py 'Linear' {maxIter} {regParam} {elasticNetParam}"
