@@ -38,32 +38,32 @@ if __name__ == "__main__":
     regParam = float(sys.argv[3])
     elasticNetParam = float(sys.argv[4])
 
-    with mlflow.start_run():
-
-        log_param("modelType", modelType)
-        log_param("maxIter", maxIter)
-        log_param("regParam", regParam)
-        log_param("elasticNetParam", elasticNetParam)
-
-        lr = LinearRegression(maxIter=maxIter, regParam=regParam, elasticNetParam=elasticNetParam)
-
-        pipeline = Pipeline(stages=[paymentIndexer, vendorIndexer, assembler, lr])
 
 
-        grModel = pipeline.fit(trainingData)
-        df_final=grModel.transform(testData)
-        evaluator=RegressionEvaluator(labelCol="label", predictionCol="prediction", metricName="r2")
-        r2=evaluator.evaluate(df_final)
-        rmse = evaluator.evaluate(df_final, {evaluator.metricName: "rmse"})
-        r2 = evaluator.evaluate(df_final, {evaluator.metricName: "r2"})
+    log_param("modelType", modelType)
+    log_param("maxIter", maxIter)
+    log_param("regParam", regParam)
+    log_param("elasticNetParam", elasticNetParam)
 
-        print('RMSE Linear: ' + str(rmse))
-        print('R^2: Linear' + str(r2))
+    lr = LinearRegression(maxIter=maxIter, regParam=regParam, elasticNetParam=elasticNetParam)
 
-        mlflow.log_metric("rmse", rmse)
-        mlflow.log_metric("r2", r2)
+    pipeline = Pipeline(stages=[paymentIndexer, vendorIndexer, assembler, lr])
 
 
-        mlflow.spark.log_model(grModel, "spark-model")
-        mlflow.spark.save_model(grModel, "spark-model")
-        print("Model saved in run %s" % mlflow.active_run().info.run_uuid)
+    grModel = pipeline.fit(trainingData)
+    df_final=grModel.transform(testData)
+    evaluator=RegressionEvaluator(labelCol="label", predictionCol="prediction", metricName="r2")
+    r2=evaluator.evaluate(df_final)
+    rmse = evaluator.evaluate(df_final, {evaluator.metricName: "rmse"})
+    r2 = evaluator.evaluate(df_final, {evaluator.metricName: "r2"})
+
+    print('RMSE Linear: ' + str(rmse))
+    print('R^2: Linear' + str(r2))
+
+    log_metric("rmse", rmse)
+    log_metric("r2", r2)
+
+
+    mlflow.spark.log_model(grModel, "spark-model")
+    mlflow.spark.save_model(grModel, "spark-model")
+    print("Model saved in run %s" % mlflow.active_run().info.run_uuid)
