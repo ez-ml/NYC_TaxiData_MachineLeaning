@@ -1,8 +1,15 @@
 import sys
 from pyspark.sql import SparkSession
 from pyspark.ml.feature import StringIndexer,VectorIndexer, VectorAssembler
+from pyspark.sql.types import IntegerType
+import pyspark.sql
 from pyspark.ml import Pipeline
+
 from pyspark.ml.regression import LinearRegression
+from pyspark.ml.regression import GeneralizedLinearRegression
+from pyspark.ml.regression import DecisionTreeRegressor
+from pyspark.ml.regression import RandomForestRegressor
+from pyspark.ml.regression import GBTRegressor
 from pyspark.ml.evaluation import RegressionEvaluator
 
 
@@ -10,7 +17,7 @@ if __name__ == "__main__":
 
     spark = SparkSession \
         .builder \
-        .appName("ml_experiment_1") \
+        .appName("Python Spark MLFlow basic example") \
         .enableHiveSupport() \
         .getOrCreate()
 
@@ -25,7 +32,15 @@ if __name__ == "__main__":
 
     (trainingData, testData) = df_102.randomSplit([0.7, 0.3])
 
-    lr = LinearRegression(maxIter=10, regParam=0.3, elasticNetParam=0.8)
+    modelType = str(sys.argv[1])
+    maxIter = float(sys.argv[2])
+    regParam = float(sys.argv[3])
+    elasticNetParam = float(sys.argv[4])
+
+
+
+
+    lr = LinearRegression(maxIter=maxIter, regParam=regParam, elasticNetParam=elasticNetParam)
 
     pipeline = Pipeline(stages=[paymentIndexer, vendorIndexer, assembler, lr])
 
@@ -37,8 +52,8 @@ if __name__ == "__main__":
     rmse = evaluator.evaluate(df_final, {evaluator.metricName: "rmse"})
     r2 = evaluator.evaluate(df_final, {evaluator.metricName: "r2"})
 
-    print("###############################################################")
     print('RMSE Linear: ' + str(rmse))
     print('R^2: Linear' + str(r2))
-    print("###############################################################")
+
+
 
