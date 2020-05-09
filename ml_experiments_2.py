@@ -16,6 +16,17 @@ from mlflow import log_metric, log_param, log_artifacts
 
 if __name__ == "__main__":
 
+
+    modelType = str(sys.argv[1])
+    maxIter = float(sys.argv[2])
+    regParam = float(sys.argv[3])
+    elasticNetParam = float(sys.argv[4])
+
+    log_param("modelType", modelType)
+    log_param("maxIter", maxIter)
+    log_param("regParam", regParam)
+    log_param("elasticNetParam", elasticNetParam)
+
     spark = SparkSession \
         .builder \
         .appName("Python Spark MLFlow basic example") \
@@ -33,17 +44,6 @@ if __name__ == "__main__":
 
     (trainingData, testData) = df_102.randomSplit([0.7, 0.3])
 
-    modelType = str(sys.argv[1])
-    maxIter = float(sys.argv[2])
-    regParam = float(sys.argv[3])
-    elasticNetParam = float(sys.argv[4])
-
-
-
-    log_param("modelType", modelType)
-    log_param("maxIter", maxIter)
-    log_param("regParam", regParam)
-    log_param("elasticNetParam", elasticNetParam)
 
     lr = LinearRegression(maxIter=maxIter, regParam=regParam, elasticNetParam=elasticNetParam)
 
