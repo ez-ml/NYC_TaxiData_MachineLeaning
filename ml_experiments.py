@@ -23,7 +23,7 @@ if __name__ == "__main__":
 
     assembler = VectorAssembler(inputCols=["passenger_count", "trip_distance","hour","day_of_week_new","start_cluster", "payment_indexed", "vendor_indexed"], outputCol="features")
 
-    (trainingData, testData) = df_201.randomSplit([0.7, 0.3])
+    (trainingData, testData) = df_102.randomSplit([0.7, 0.3])
 
     lr = LinearRegression(maxIter=10, regParam=0.3, elasticNetParam=0.8)
 
