@@ -1,4 +1,4 @@
-name: NYC_Trips_Analysis
+name: NYC_TaxiData_ML
 channels:
   - conda-forge
   - defaults

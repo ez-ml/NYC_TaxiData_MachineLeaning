@@ -22,27 +22,30 @@ if __name__ == "__main__":
         .enableHiveSupport() \
         .getOrCreate()
 
-    df_201=spark.sql("SELECT * from default.nyc_trips_final_4").na.drop()
-    df_201=df_201.withColumnRenamed("fare_amt", "label")
-    df_201=df_201.withColumn("day_of_week_new",df_201.day_of_week.cast("int"))
+    df_102=spark.sql("SELECT * from default.nyc_trips_final_102").na.drop()
+    df_102=df_102.withColumnRenamed("fare_amt", "label")
+    df_102=df_102.withColumn("day_of_week_new",df_102.day_of_week.cast("int"))
 
     paymentIndexer = StringIndexer(inputCol="payment_type", outputCol="payment_indexed").setHandleInvalid("skip")
     vendorIndexer = StringIndexer(inputCol="vendor_name", outputCol="vendor_indexed").setHandleInvalid("skip")
 
     assembler = VectorAssembler(inputCols=["passenger_count", "trip_distance","hour","day_of_week_new","start_cluster", "payment_indexed", "vendor_indexed"], outputCol="features")
 
-    (trainingData, testData) = df_201.randomSplit([0.7, 0.3])
+    (trainingData, testData) = df_102.randomSplit([0.7, 0.3])
 
-    alpha = float(sys.argv[1]) if len(sys.argv) > 1 else 0.5
-    l1_ratio = float(sys.argv[2]) if len(sys.argv) > 2 else 0.5
+    modelType = str(sys.argv[1])
+    maxIter = float(sys.argv[2])
+    regParam = float(sys.argv[3])
+    elasticNetParam = float(sys.argv[4])
 
     with mlflow.start_run():
-        log_param("maxIter", 10)
-        log_param("regParam", 0.3)
-        log_param("elasticNetParam", 0.8)
 
+        log_param("modelType", modelType)
+        log_param("maxIter", maxIter)
+        log_param("regParam", regParam)
+        log_param("elasticNetParam", elasticNetParam)
 
-        lr = LinearRegression(maxIter=10, regParam=0.3, elasticNetParam=0.8)
+        lr = LinearRegression(maxIter=maxIter, regParam=regParam, elasticNetParam=elasticNetParam)
 
         pipeline = Pipeline(stages=[paymentIndexer, vendorIndexer, assembler, lr])
 
@@ -56,6 +59,10 @@ if __name__ == "__main__":
 
         print('RMSE Linear: ' + str(rmse))
         print('R^2: Linear' + str(r2))
+
+        mlflow.log_metric("rmse", rmse)
+        mlflow.log_metric("r2", r2)
+
 
         mlflow.spark.log_model(grModel, "spark-model")
         mlflow.spark.save_model(grModel, "spark-model")

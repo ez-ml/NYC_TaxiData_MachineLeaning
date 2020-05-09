@@ -5,6 +5,8 @@ conda_env: conda.yaml
 entry_points:
   main:
     parameters:
-        alpha: float
-        l1_ratio: {type: float, default: 0.1}
-    command: "python nyc_taxi_analysis.py {alpha} {l1_ratio}"
+        modelType: str
+        maxIter: {type: float, default: 10}
+        regParam: {type: float, default: 0.3}
+        elasticNetParam: {type: float, default: 0.8}
+    command: "spark-submit ml_experiments_2.py 'Linear' {maxIter} {regParam} {elasticNetParam}"
