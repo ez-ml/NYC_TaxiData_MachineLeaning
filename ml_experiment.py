@@ -35,7 +35,7 @@ if __name__ == "__main__":
     r2 = evaluator.evaluate(df_final, {evaluator.metricName: "r2"})
 
     print('RMSE Linear: ' + str(rmse))
-    #print('R^2: Linear' + str(r2))
+    print('R^2: Linear' + str(r2))
 
 
 
